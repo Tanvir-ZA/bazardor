@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Suspense, useSyncExternalStore } from "react";
+import toast from "react-hot-toast";
 import NavLinks from "@/components/NavLinks";
+import { authClient } from "@/lib/auth-client";
 
 function subscribe() {
   return () => {};
@@ -18,7 +21,16 @@ function getDate() {
 }
 
 export default function Navbar({ categories }) {
+  const router = useRouter();
   const date = useSyncExternalStore(subscribe, getDate, () => "");
+  const { data: session, isPending } = authClient.useSession();
+
+  async function handleSignOut() {
+    await authClient.signOut();
+    toast.success("সাইন আউট হয়েছে");
+    router.push("/");
+    router.refresh();
+  }
 
   return (
     <header className="bg-white shadow-sm">
@@ -31,19 +43,40 @@ export default function Navbar({ categories }) {
           </div>
         </Link>
 
-        <div className="flex gap-2">
-          <Link
-            href="/signin"
-            className="btn btn-sm sm:btn-md btn-outline btn-success"
-          >
-            সাইন ইন
-          </Link>
-          <Link
-            href="/signup"
-            className="btn btn-sm sm:btn-md btn-success text-white"
-          >
-            সাইন আপ
-          </Link>
+        <div className="flex items-center gap-2">
+          {isPending ? (
+            <div className="skeleton h-8 w-28"></div>
+          ) : session ? (
+            <>
+              <Link
+                href="/profile"
+                className="btn btn-sm sm:btn-md btn-outline btn-success"
+              >
+                {session.user.name}
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="btn btn-sm sm:btn-md btn-success text-white"
+              >
+                সাইন আউট
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signin"
+                className="btn btn-sm sm:btn-md btn-outline btn-success"
+              >
+                সাইন ইন
+              </Link>
+              <Link
+                href="/signup"
+                className="btn btn-sm sm:btn-md btn-success text-white"
+              >
+                সাইন আপ
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
