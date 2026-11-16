@@ -1,17 +1,24 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { Suspense, useSyncExternalStore } from "react";
+import NavLinks from "@/components/NavLinks";
 
-export default function Navbar({ categories }) {
-  const pathname = usePathname();
+function subscribe() {
+  return () => {};
+}
 
-  const date = new Date().toLocaleDateString("bn-BD", {
+function getDate() {
+  return new Date().toLocaleDateString("bn-BD", {
     weekday: "long",
     day: "numeric",
     month: "long",
     year: "numeric",
   });
+}
+
+export default function Navbar({ categories }) {
+  const date = useSyncExternalStore(subscribe, getDate, () => "");
 
   return (
     <header className="bg-white shadow-sm">
@@ -20,9 +27,7 @@ export default function Navbar({ categories }) {
           <Image src="/logo.png" alt="logo" width={40} height={40} />
           <div>
             <p className="font-bold text-green-700 leading-none">বাজার দর</p>
-            <p className="text-xs text-gray-500" suppressHydrationWarning>
-              {date}
-            </p>
+            <p className="text-xs text-gray-500">{date}</p>
           </div>
         </Link>
 
@@ -42,34 +47,10 @@ export default function Navbar({ categories }) {
         </div>
       </div>
 
-      <nav className="max-w-6xl mx-auto px-4 pb-2 flex gap-2 overflow-x-auto">
-        <Link
-          href="/"
-          className={`px-3 py-1 rounded-full whitespace-nowrap text-sm ${
-            pathname === "/"
-              ? "bg-green-600 text-white"
-              : "bg-green-100 text-green-800"
-          }`}
-        >
-          সব
-        </Link>
-
-        {categories.map((c) => {
-          const active = pathname === `/category/${c.slug}`;
-          return (
-            <Link
-              key={c.slug}
-              href={`/category/${c.slug}`}
-              className={`px-3 py-1 rounded-full whitespace-nowrap text-sm ${
-                active
-                  ? "bg-green-600 text-white"
-                  : "bg-green-100 text-green-800"
-              }`}
-            >
-              {c.icon} {c.nameBn}
-            </Link>
-          );
-        })}
+      <nav className="max-w-6xl mx-auto px-4 pb-2 flex gap-2 overflow-x-auto min-h-10">
+        <Suspense fallback={null}>
+          <NavLinks categories={categories} />
+        </Suspense>
       </nav>
     </header>
   );

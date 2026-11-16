@@ -1,3 +1,5 @@
+import { cacheLife } from "next/cache";
+
 const BASE = "https://openapi.programming-hero.com/api/bazardor";
 
 export function toArray(d) {
@@ -6,14 +8,18 @@ export function toArray(d) {
 }
 
 export async function getCategories() {
-  const r = await fetch(`${BASE}/categories`, { cache: "no-store" });
+  "use cache";
+  cacheLife("hours");
+  const r = await fetch(`${BASE}/categories`);
   return toArray(await r.json());
 }
 
 export async function getProducts(category) {
+  "use cache";
+  cacheLife("hours");
   const url = category
     ? `${BASE}/products?category=${category}`
     : `${BASE}/products`;
-  const r = await fetch(url, { cache: "no-store" });
+  const r = await fetch(url);
   return toArray(await r.json());
 }
