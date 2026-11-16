@@ -5,10 +5,18 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import PasswordInput from "@/components/PasswordInput";
+import { useState, useEffect } from "react";
 
 export default function SignUp() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  
+    useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("error") === "login-required") {
+      toast.error("এই পেজ দেখতে আগে সাইন ইন করুন");
+    }
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
