@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function SignIn() {
   const router = useRouter();
@@ -42,13 +43,7 @@ export default function SignIn() {
           required
           className="input input-bordered w-full"
         />
-        <input
-          name="password"
-          type="password"
-          placeholder="পাসওয়ার্ড"
-          required
-          className="input input-bordered w-full"
-        />
+        <PasswordInput name="password" placeholder="পাসওয়ার্ড" required />
         <button
           type="submit"
           disabled={loading}

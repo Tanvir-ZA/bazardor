@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
+import PasswordInput from "@/components/PasswordInput";
 
 export default function SignUp() {
   const router = useRouter();
@@ -49,13 +50,11 @@ export default function SignUp() {
           required
           className="input input-bordered w-full"
         />
-        <input
+        <PasswordInput
           name="password"
-          type="password"
           placeholder="পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)"
           required
           minLength={8}
-          className="input input-bordered w-full"
         />
         <button
           type="submit"
