@@ -1,16 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import PasswordInput from "@/components/PasswordInput";
-import { useState, useEffect } from "react";
+import SocialButtons from "@/components/SocialButtons";
 
 export default function SignUp() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  
+
     useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("error") === "login-required") {
@@ -72,6 +72,7 @@ export default function SignUp() {
           {loading ? "অপেক্ষা করুন..." : "সাইন আপ"}
         </button>
       </form>
+      <SocialButtons />
 
       <p className="text-sm text-gray-600 mt-4 text-center">
         আগে থেকেই একাউন্ট আছে?{" "}

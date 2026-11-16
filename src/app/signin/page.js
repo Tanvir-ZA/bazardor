@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
 import PasswordInput from "@/components/PasswordInput";
+import SocialButtons from "@/components/SocialButtons";
 
 export default function SignIn() {
   const router = useRouter();
@@ -52,6 +53,7 @@ export default function SignIn() {
           {loading ? "অপেক্ষা করুন..." : "সাইন ইন"}
         </button>
       </form>
+      <SocialButtons />
 
       <p className="text-sm text-gray-600 mt-4 text-center">
         একাউন্ট নেই?{" "}

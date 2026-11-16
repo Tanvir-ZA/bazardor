@@ -13,3 +13,7 @@
 .marquee {
   animation: marquee 60s linear infinite;
 }
+
+body {
+  font-variant-numeric: lining-nums;
+}
